@@ -23,6 +23,8 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     'users',
+    'reservations',
+    'restaurants',
 ]
 
 THIRD_PARTY_APPS = [
@@ -122,3 +124,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': 'rest_framework.permissions.',
 }
+
+AUTH_USER_MODEL = 'users.User'
