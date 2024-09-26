@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField(max_length=30, unique=True)
     is_active = models.BooleanField(default=False)
-    phone = models.CharField(max_length=11, unique=True)
+    phone = models.CharField(max_length=13, unique=True)
     nickname = models.CharField(max_length=12)
     birthday = models.DateField(max_length=8, null=True, blank=True)
     gender = models.CharField(choices=GenderChoice)
