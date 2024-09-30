@@ -1,5 +1,7 @@
+from datetime import timedelta
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv('./.env')
@@ -29,6 +31,7 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'rest_framework_simplejwt'
 
 
 ]
@@ -128,7 +131,21 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "UPDATE_LAST_LOGIN": True,
+}
+
+KAKAO_CLIENT_ID = os.environ.get('KAKAO_CLIENT_ID')
+KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://127.0.0.1:8000/api/v1/users/kakao/callback/')
+KAKAO_CLIENT_SECRET = os.environ.get('KAKAO_CLIENT_SECRET')
