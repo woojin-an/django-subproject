@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from restaurants.models import Restaurant
+from restaurants.models import Menu, Restaurant
 from users.serializers import UserSerializer
 
 
@@ -22,3 +22,9 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
         model = Restaurant
         exclude = ['id']
 
+
+class MenuSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Menu
+        fields = '__all__'

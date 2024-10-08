@@ -68,8 +68,9 @@ class IsRestaurantOwner(IsOwner):
         return obj.restaurant.owner == request.user
 
 
-class EnterRestaurantAPIView(APIView):
+class ChangeReservationStatusBaseView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsRestaurantOwner]
+    change_status = None
 
     def get_object(self):
         reservation = Reservation.objects.get(pk=self.kwargs.get("pk"))
@@ -81,23 +82,22 @@ class EnterRestaurantAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.status = "ET"
+        instance.status = self.change_status
         instance.save()
-        return Response({"detail": f"{instance.user.nickname}님의 입장 처리에 성공하였습니다."}, status=status.HTTP_200_OK)
+        return Response(
+            {"detail": f"{instance.user.nickname} was {instance.get_status_display()}."},
+            status=status.HTTP_200_OK
+        )
 
 
-class CancelReservationAPIView(EnterRestaurantAPIView):
-
-    def post(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.status = "CC"
-        instance.save()
-        return Response({"detail": f"{instance.user.nickname}님의 예약이 취소되었습니다."}, status=status.HTTP_200_OK)
+class EnterRestaurantAPIView(ChangeReservationStatusBaseView):
+    change_status = "ET"
 
 
-class NoShowReservationAPIView(EnterRestaurantAPIView):
-    def post(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.status = "NS"
-        instance.save()
-        return Response({"detail": f"{instance.user.nickname}님의 예약이 노쇼(NoShow) 처리 되었습니다."}, status=status.HTTP_200_OK)
+class CancelReservationAPIView(ChangeReservationStatusBaseView):
+    change_status = "CC"
+
+
+class NoShowReservationAPIView(ChangeReservationStatusBaseView):
+    change_status = "NS"
+
